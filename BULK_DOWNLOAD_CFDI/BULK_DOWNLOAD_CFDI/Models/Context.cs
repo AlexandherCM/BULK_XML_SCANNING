@@ -12,5 +12,10 @@ namespace BULK_DOWNLOAD_CFDI.Models
             base.OnModelCreating(modelBuilder);
         }
 
+        public virtual DbSet<CtasFacturas> CtasFacturas { get; set; }
+        public virtual DbSet<CtasConceptos> CtasConceptos { get; set; }
+        public virtual DbSet<CtasPagosFactura> CtasPagosFactura { get; set; }
+        public virtual DbSet<CtasDocsRelacionados> CtasDocsRelacionados { get; set; }
+
     }   
 }

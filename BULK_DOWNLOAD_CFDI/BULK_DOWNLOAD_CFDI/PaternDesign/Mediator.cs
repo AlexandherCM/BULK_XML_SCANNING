@@ -17,8 +17,13 @@ namespace BULK_DOWNLOAD_CFDI.PaternDesign
     {
         private IConfiguration _configuration;
 
+        //LECTOR DE CFDIs COMPRIMIDOS
         private CompressedXmlReader _chargeCFDIs;
+
+        //MAPPER QUE TRANSPORTA LA INFO DE LOS XMLs a LOS SQL RECORDs
         private XmlToCtasFacturaMapper _xmlToCtasFacturaMapper; 
+
+        //FUNCIÓN QUE EJECUTA LOS PROCEDIMIENTOS ALMACENADOS PARA LA CARGA DE DATOS
         private FacturaSqlUploader _facturaSqlUploader;     
 
         public Mediator(Context context, IConfiguration configuration)
@@ -36,10 +41,12 @@ namespace BULK_DOWNLOAD_CFDI.PaternDesign
             var records = await _chargeCFDIs.ProcesarComprimidos(_configuration["RutaCFDIs"]);
             await _facturaSqlUploader.SubirFacturasAsync(records);
         }
-                
+
+        //NOTIFICAR MAPPEO A VERSIÓN 4.0         
         public List<FacturaDataRecordOrderDTO> NotiFyMapper4_0(List<Comprobante> CFDIs) 
-            => _xmlToCtasFacturaMapper.GetSqlDataRecords4_0(CFDIs); 
-            
+            => _xmlToCtasFacturaMapper.GetSqlDataRecords4_0(CFDIs);
+
+        //NOTIFICAR MAPPEO A VERSIÓN 3.3         
         public List<FacturaDataRecordOrderDTO> NotiFyMapper3_3(List<Comprobante3_3> CFDIs) 
             => _xmlToCtasFacturaMapper.GetSqlDataRecords3_3(CFDIs);
         

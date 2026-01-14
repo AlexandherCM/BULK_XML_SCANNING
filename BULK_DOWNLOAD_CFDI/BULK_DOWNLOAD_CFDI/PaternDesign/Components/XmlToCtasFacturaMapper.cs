@@ -14,6 +14,8 @@ namespace BULK_DOWNLOAD_CFDI.PaternDesign.Components
 {
     public class XmlToCtasFacturaMapper : BaseComponent
     {
+        //FALTA AUTOMATIZAR LA PARTE DE FACTURA EMITIDA O RECIBIDA
+        //SEGÚN EL TIPO DE PETICIÓN QUE SE HACE AL SAT
         private bool emitida = false;
         public XmlToCtasFacturaMapper(IConfiguration configuration) : base(configuration) { }
 
@@ -226,7 +228,6 @@ namespace BULK_DOWNLOAD_CFDI.PaternDesign.Components
                                 }
                             }
                         }
-
 
                         var pagoRec = new SqlDataRecord(metaPago);
                         pagoRec.SetString(0, pagoId);

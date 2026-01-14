@@ -7,6 +7,7 @@
 
 namespace BULK_DOWNLOAD_CFDI.PaternDesign.Components
 {
+    //CLASE BASE QUE DEFINE LAS CARACTERISTICAS DE UN COMPONENTE
     public class BaseComponent  
     {
         protected IConfiguration _configuration;

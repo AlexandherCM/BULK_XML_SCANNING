@@ -28,6 +28,8 @@ namespace BULK_DOWNLOAD_CFDI.PaternDesign.Components
             await using var connection = new SqlConnection(conn);
             await connection.OpenAsync();
 
+            //CARGA DE DATOS POR LOTES, CADA QUE i SEA MENOR SE SUMA 1,000 AL INDICE PARA CARGAR
+            //EL CONJUNTO DE MIL EN CURSO
             for (int i = 0; i < registros.Count; i += batchSize)
             {
                 var batch = registros.Skip(i).Take(batchSize).ToList();
