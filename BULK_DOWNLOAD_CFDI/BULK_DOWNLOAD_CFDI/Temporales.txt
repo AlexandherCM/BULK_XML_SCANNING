@@ -1,0 +1,93 @@
+﻿
+
+
+        protected class StringWriterWithEncoding : StringWriter
+        {
+            private readonly Encoding m_Encoding;
+
+            public override Encoding Encoding => m_Encoding;
+
+            public StringWriterWithEncoding(Encoding encoding)
+            {
+                m_Encoding = encoding;
+            }
+        }
+
+        public async Task Request()
+        {
+            var pfx = File.ReadAllBytes(_RutaPFX);
+            X509Certificate2 certifcate = ObtenerX509Certificado(pfx);
+
+        }
+
+        public X509Certificate2 ObtenerX509Certificado(byte[] pfx)
+            => new X509Certificate2(pfx, _clave, X509KeyStorageFlags.MachineKeySet
+                 | X509KeyStorageFlags.PersistKeySet
+                 | X509KeyStorageFlags.Exportable);
+
+
+
+                         //public async Task SolicitudDescarga()
+        //{
+        //    // Obtener el token de autenticación
+        //    string token = await GetToken();
+        //    Console.Write($"Token generado: {token}");
+        //    // Crear la solicitud
+        //    var solicitud = new SolicitudDescargaMasivaTerceroEmitidos
+        //    {
+        //        FechaInicial = new DateTime(2025, 06, 02),
+        //        FechaFinal = new DateTime(2025, 06, 06),
+        //        RfcSolicitante = "UCO940405JJ9",  // Tu RFC
+        //        RfcEmisor = "UCO940405JJ9",   // RFC del emisor
+        //        EstadoComprobante = "ACTIVO",    // Estado del comprobante
+        //        TipoComprobante = "I",           // Tipo de comprobante: I (Ingreso), E (Egreso)
+        //        TipoSolicitud = TipoDescargaMasivaTerceros.CFDI,  // Tipo de descarga
+        //        RfcReceptores = new string[] { "OTH970331SU2" } // RFC del receptor (opcional)
+        //    };
+
+
+        //    string xml = ConvertirXML(solicitud);
+
+        //    // Crear el cliente SOAP
+        //    var client = new SolicitaDescargaServiceClient();
+
+        //    await client.OpenAsync();  // Abre la conexión con el servicio
+        //    var respuesta = await client.SolicitaDescargaEmitidosAsync(solicitud);
+
+        //    if (respuesta.CodEstatus == "200")
+        //    {
+        //        // La solicitud se realizó correctamente
+        //        Console.WriteLine($"ID de Solicitud: {respuesta.IdSolicitud}");
+        //        // Aquí puedes guardar el ID de solicitud y proceder a verificar su estatus
+        //    }
+        //    else
+        //    {
+        //        // Manejo de errores
+        //        Console.WriteLine($"Error: {respuesta.Mensaje}");
+        //    }
+        //}
+
+        public string ConvertirXML(SolicitudDescargaMasivaTerceroEmitidos solicitud)
+        {
+            // Los namespaces a usar en la solicitud
+            XmlSerializerNamespaces xmlSerializerNamespaces = new XmlSerializerNamespaces();
+            //xmlSerializerNamespaces.Add("tns", "http://DescargaMasivaTerceros.sat.gob.mx");  // Namespace principal
+            //xmlSerializerNamespaces.Add("ds", "http://www.w3.org/2000/09/xmldsig#");  // Namespace de firma
+            //xmlSerializerNamespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");  // Namespace de XML Schema
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(SolicitudDescargaMasivaTerceroEmitidos));
+
+            string result = string.Empty;
+
+            // Serializa el objeto a un string con codificación UTF-8
+            using (StringWriterWithEncoding stringWriterWithEncoding = new StringWriterWithEncoding(Encoding.UTF8))
+            {
+                using (XmlWriter xmlWriter = XmlWriter.Create(stringWriterWithEncoding, new XmlWriterSettings { Indent = true }))
+                {
+                    xmlSerializer.Serialize(xmlWriter, solicitud, xmlSerializerNamespaces);
+                    result = stringWriterWithEncoding.ToString();
+                }
+            }
+
+            return result;
+        }
